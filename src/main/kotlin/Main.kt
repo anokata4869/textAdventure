@@ -59,8 +59,28 @@ fun prolog(){
 }
 
 fun main() {
-    prolog()
-    startGame()
+    println("Willkommen im Hauptmenü")
+    println("1. Neues Spiel")
+    println("2. Spiel Laden")
+    println("3. Einstellungen")
+    println("4. Beenden")
+
+    print("Bitte wähle eine Option: ")
+    val auswahl = readln()?.toIntOrNull()
+
+    when (auswahl) {
+        1 -> neuesSpiel(prolog(), startGame())
+        2 -> spielLaden()
+        3 -> einstellungen()
+        4 -> spielBeenden()
+        else -> println("Ungültige Option. Bitte wähle eine Zahl zwischen 1 und 4.")
+    }
+
+
+
+
+
+
 
 
 }
