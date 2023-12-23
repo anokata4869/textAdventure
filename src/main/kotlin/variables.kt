@@ -1,3 +1,5 @@
+package variable
+
 object meineVariablen {
 
 
