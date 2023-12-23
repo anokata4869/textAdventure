@@ -1,88 +1,68 @@
-import kotlin.random.Random
+// Hier können die Variablen und Listen für das Spiel definiert werden
 
-class Person(var name: String, var alter: Int, var wohnort: String) {
-    fun aelterWerden() {
-        alter++
-    }
+var RassenWahl = mutableListOf(
+        "Menschen der alten Welt" ,
+        " Elbenvolk der Lumira " ,
+        "Zwerge der Eisengrube ",
+        "Feen des Lichtwaldes",
+        "Nymphen des Wasserbergs")
 
-    fun info(): String {
-        return "Name: $name, Alter: $alter, Wohnort: $wohnort"
-    }
+var klassenWahlMenschen = mutableListOf("Krieger, Magier, Königsritter, Pendler")
+var klassenWahlLumira = mutableListOf("Waldhüter, Weiser der Ätherie, Naturbändiger, Sternenweiser")
+var weaponMutableList = mutableListOf("..")
+val ausgewaehlteRasse: String = ""
+//val indexDesGewaehltenEintrags: String = readln()
+
+// Spielerklasse, um die Spielerdaten zu speichern
+data class Spieler(
+    var name: String,
+    var level: Int = 1,
+    var erfahrung: Int = 0,
+    var skills: MutableList<String> = mutableListOf(),
+    var waffen: MutableList<String> = mutableListOf(),
+
+
+    // Verwende den ausgewählten Eintrag aus der Liste
+
+    // Weitere Spielerattribute können hinzugefügt werden
+)
+
+// Funktion zum Starten des Spiels
+fun startGame() {
+    println("Willkommen im mittelalterlichen Königreich! Ein Abenteuer erwartet dich.")
+
+    // Spielererstellung und Einführung
+    println("Welche Rasse willst du Spielen? ")
+    println("folgende Rassen stehen zur auswahl: ${RassenWahl.joinToString()}")
+    val ausgewaehlteRasse: String = ""
+    val indexDesGewaehltenEintrags: String = readln()
+
+    println("du bist ein $indexDesGewaehltenEintrags")
+
+
+    println("Wie ist dein Name, tapferer Recke?")
+    val spielerName = readln() ?: "Spieler"
+    val spieler = Spieler(spielerName)
+
+    println("Hallo, $spielerName! Begib dich auf deine Reise und sei der Held der Geschichte.")
+
+    // Starte das Abenteuer und implementiere die Spielmechanik hier
+    // Hier kannst du Funktionen für verschiedene Spielmechaniken, Ereignisse und Interaktionen implementieren
+    // wie z.B. Kämpfe, Levelaufstiege, Fähigkeitenerwerb, Waffenfund usw.
 }
 
-var genericVorName = mutableListOf("Nathan\n" ,
-        "Wolfram\n",
-        "Ilay\n" ,
-        "Andre\n" ,
-        "Joey\n" ,
-        "Olaf\n" ,
-        "Erik\n" ,
-        "Janek\n" ,
-        "Henry\n" ,
-        "Luc\n" ,
-        "Domenik\n" ,
-        "Marek\n" ,
-        "Ömer\n" ,
-        "Yannis\n" ,
-        "Vincent")
 
-var genericNachName = mutableListOf("Lutz\n" ,
-        "Baumeister\n" ,
-        "Sailer\n" ,
-        "Borchert\n" ,
-        "Metzner\n" ,
-        "Nguyen\n" ,
-        "Wille\n" ,
-        "Kersten\n" ,
-        "Wiedemann\n" ,
-        "Thomas\n",
-        "Schmitz\n",
-        "Kohlscheidt\n",
-        "Winchester\n",
-        "Balduin\n",
-        "Karrenbauer\n",
-        "Kahn\n",
-    )
+fun prolog(){
 
-    val kombiList = genericVorName.zip(genericNachName)
+    println("01.01.1634")
+    println("Die geschichte beginnt ihren Lauf in Silberbach einem kleinen dorf Südlich von Falkenhorst und dem derzeit Herrschenden König Henry von Lancaster ")
 
-    val randomNameIndex = Random.nextInt(kombiList.size)
-    val randomFullName = kombiList[randomNameIndex]
+
+}
 
 fun main() {
-    println("Willkommen bei Esort of Magic")
-
-    println("Gib deinen Namen ein:")
-    var name = readln() ?: "" // Benutzereingabe für den Namen
-
-    println("Gib dein Alter ein:")
-    val alterInput = readln()  ?: "0" // Benutzereingabe für das Alter
-    val alter = alterInput.toIntOrNull() ?: 0 // Das Alter in Integer umwandeln, Standardwert: 0, falls die Eingabe ungültig ist
-
-    println("Gib deinen Wohnort ein:")
-    val wohnort = readln()  ?: "" // Benutzereingabe für den Wohnort
-
-    // Erstellen einer Person-Instanz mit den eingegebenen Informationen
-    val person1 = Person(name, alter, wohnort)
-
-    // Informationen über die erstellte Person ausgeben
-    println("Neue Person erstellt:")
-    println(person1.info())
-
-
-    println("Hallo $name wie geht es dir")
-
-
-
-
-    println("Mein Name ist ${randomFullName.first} ${randomFullName.second}, wie geht es dir?")
-    val antwort = readln() ?: ""
-
-    if (antwort.equals("Gut" , ignoreCase = true)) {
-        println("Das freut mich sehr.")
-    } else {
-        println("Ich hoffe, ich kann deine Laune steigern.")
-    }
+    prolog()
+    startGame()
 
 
 }
