@@ -22,7 +22,7 @@ data class Spieler(
     var waffen: MutableList<String> = mutableListOf(),
 
 
-    // Verwende den ausgewählten Eintrag aus der Liste
+
 
     // Weitere Spielerattribute können hinzugefügt werden
 )
@@ -46,9 +46,7 @@ fun startGame() {
 
     println("Hallo, $spielerName! Begib dich auf deine Reise und sei der Held der Geschichte.")
 
-    // Starte das Abenteuer und implementiere die Spielmechanik hier
-    // Hier kannst du Funktionen für verschiedene Spielmechaniken, Ereignisse und Interaktionen implementieren
-    // wie z.B. Kämpfe, Levelaufstiege, Fähigkeitenerwerb, Waffenfund usw.
+
 }
 
 
