@@ -5,6 +5,8 @@ open class Held(
     var ruestung: Int,
     private var staerke: Double = 1.0
 ) {
+
+    val angriff: Int = 100
     val maxHp: Double = hp
 
     fun zeigeStatus() {
@@ -17,7 +19,7 @@ open class Held(
     open fun attackiere(gegner: Gegner) {
         println("$name greift ${gegner.name} an!")
 
-        val schadenswert = generiereZufallsSchaden(12, 33)
+        val schadenswert = generiereZufallsSchaden(120, 330)
         val effektiverSchaden = schadenswert - gegner.ruestung.coerceAtLeast(0)
 
         if (effektiverSchaden > 0) {
