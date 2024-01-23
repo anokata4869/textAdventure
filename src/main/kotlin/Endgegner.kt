@@ -1,7 +1,7 @@
 class Endgegner(
     name: String = "Jake Michaelson",
      hp: Double,
-    var ruestung: Int,
+     ruestung: Int,
     var blutdurst: Blutdurst
 ) : Gegner(name, hp, ruestung) {
 

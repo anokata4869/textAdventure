@@ -275,7 +275,7 @@ fun startGame() {
 
     if (gewaehlteRasse != null) {
         println("Du hast die Rasse '$gewaehlteRasse' gewählt. Viel Spaß beim Abenteuer!")
-        // Hier kannst du weitere Logik für das Spiel mit der gewählten Rasse implementieren
+
     } else {
         println("Ungültige Auswahl. Bitte gib den Namen einer verfügbaren Rasse ein.")
     }

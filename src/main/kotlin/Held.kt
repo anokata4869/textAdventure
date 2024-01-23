@@ -1,17 +1,17 @@
 import kotlin.random.Random
-
 open class Held(
-    val name: String = readln(),
+    val name: String,
     var hp: Double,
     var ruestung: Int,
-    //var kriegspunkte: Kriegspunkte = Kriegspunkte(0, 200)
+    private var staerke: Double = 1.0
 ) {
-    //class Kriegspunkte(var aktuell: Int, val max: Int)
+    val maxHp: Double = hp
 
     fun zeigeStatus() {
         println("Status von $name:")
         println("Rüstung: $ruestung")
-        //println("Kriegspunkte: ${kriegspunkte.aktuell}/${kriegspunkte.max}")
+        println("HP: $hp")
+        println("Stärke: $staerke")
     }
 
     open fun attackiere(gegner: Gegner) {
@@ -29,6 +29,14 @@ open class Held(
         }
     }
 
+    fun heile(heilung: Double) {
+        hp = minOf(hp + heilung, maxHp)
+    }
+
+    fun staerkeErhoehen(erhoehung: Double) {
+        staerke += erhoehung
+    }
+
     fun ermittleSchaden(schaden: Int) {
         hp -= schaden
         if (hp < 0) {
@@ -36,9 +44,8 @@ open class Held(
         }
     }
 
-    private fun spezialangriff() {
+    fun spezialangriff() {
         println("$name führt einen Spezialangriff aus!")
-
 
         val schadensanteil = Random.nextDouble(0.2, 0.45)
 
@@ -50,9 +57,7 @@ open class Held(
         return Random.nextInt(min, max + 1)
     }
 
-    private val maxHp: Double = hp
-}
-
-    fun cheat(){
-        Endgegner
+    fun cheat(gegner: Gegner) {
+        gegner.hp = 0.0
     }
+}
