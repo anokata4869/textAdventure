@@ -1,7 +1,6 @@
 object Hauptmenü {
 
 
-
     fun zeigeHauptmenü() {
         var auswahl: Int
 
@@ -26,7 +25,6 @@ object Hauptmenü {
     }
 
 
-
     private fun starteNeuesSpiel() {
         Ladebildschirm.zeigeLadesequenz()
         val kampfsystem = Kampfsystem()
@@ -43,3 +41,4 @@ object Hauptmenü {
 
         println("Optionen werden angezeigt...")
     }
+}

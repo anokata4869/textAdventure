@@ -4,7 +4,7 @@ class Minion(var name: String = "kleiner Gehilfe") {
     fun greifeAn(held: Held) {
         val schaden = 50
         held.ermittleSchaden(schaden)
-        
+
         println("Minion $name greift die Helden an und fügt $schaden Schaden zu!")
     }
 
@@ -24,6 +24,7 @@ class Endgegner(
 
     private var minionBeschworen = false
     private var minion: Minion? = null
+    private var fluchAktiviert = false
     var fluchRunden = 0
 
     init {
@@ -40,35 +41,20 @@ class Endgegner(
         println("Rüstung: $ruestung")
         println("Blutdurst: ${blutdurst.aktuell}/${blutdurst.max}")
     }
+    fun beschwoereMinion() {
+        if (minionBeschworen) return
 
-    fun greifeAn(helden: List<Held>) {
-        if (fluchRunden > 0) {
-            fluchRunden--
-            fluch(helden)
-        }
-
-        val schaden = berechneZufallsSchaden()
-        val reduzierterSchaden = schaden - helden.first().ruestung.coerceAtLeast(0)
-
-        if (reduzierterSchaden > 0) {
-            val zufaelligerHeld = helden.random()
-            zufaelligerHeld.ermittleSchaden(reduzierterSchaden)
-            println("Der Endgegner $name greift an und fügt ${zufaelligerHeld.name} $reduzierterSchaden Schaden zu!")
-        } else {
-            println("Der Angriff des Endgegners wurde abgewehrt! Kein Schaden zugefügt.")
-        }
-
-        blutdurst.aktuell = (blutdurst.aktuell + schaden / 2).coerceAtMost(blutdurst.max)
-        println("Blutdurst des Endgegners: ${blutdurst.aktuell}/${blutdurst.max}")
-
-        if (minionBeschworen) {
-            beschwoereMinion()
-        } else {
-            println("Der Endgegner hat noch keine Minions beschworen.")
-        }
+        val neuerMinion = Minion("Minion-1")
+        println("Der Endgegner $name beschwört einen Minion: ${neuerMinion.name}")
+        minion = neuerMinion
     }
 
-    open fun feueratem(helden: List<Held>) {
+
+    fun greifeMitMinionAn() {
+        minion?.greifeAn(this)
+    }
+
+    fun feueratem(helden: List<Held>) {
         if (blutdurst.aktuell >= 40) {
             println("$name aktiviert Feueratem und fügt allen Helden Flächenschaden zu!")
 
@@ -85,24 +71,71 @@ class Endgegner(
         }
     }
 
-    fun beschwoereMinion() {
-        if (!minionBeschworen) return
 
-        val neuerMinion = Minion("Minion-1")
-        println("Der Endgegner $name beschwört einen Minion: ${neuerMinion.name}")
-        minion = neuerMinion
-    }
-
-    fun greifeMitMinionAn() {
-        minion?.greifeAn(this)
-    }
 
     fun fluch(helden: List<Held>) {
-        for (held in helden) {
-            held.ermittleSchaden(10)
-            println("${held.name} erleidet Fluchschaden! Neue HP: ${held.hp}")
+        if (!fluchAktiviert) {
+            for (held in helden) {
+                held.ermittleSchaden(10)
+                println("${held.name} erleidet Fluchschaden! Neue HP: ${held.hp}")
+            }
+            fluchAktiviert = true
+        } else {
+            println("Der Fluch wurde bereits aktiviert und ist nicht erneut verfügbar.")
         }
     }
+
+
+    fun kiGesteuerterAngriff(helden: List<Held>) {
+        println("--- $name ist am Zug ---")
+        if (!fluchAktiviert) {
+            fluchAktiviert = true
+            println("Der Fluch des Endgegners $name wurde aktiviert.")
+        }
+
+        if (fluchRunden > 0) {
+            fluchRunden--
+            greifeAn(helden)
+
+        } else {
+            // KI-Entscheidung basierend auf HP und Blutdurst
+            when {
+                hp <= 200 -> {
+                    // Wenn HP niedrig sind, Fluch anwenden
+                    fluch(helden)
+                    println("$name verwendet Fluch aufgrund niedriger HP.")
+                }
+                hp <= 1000 && !minionBeschworen -> {
+                    // Wenn HP unter 1000 und Minion noch nicht beschworen wurde, Minion beschwören
+                    beschwoereMinion()
+                    println("$name beschwört einen Minion aufgrund niedriger HP.")
+                }
+                blutdurst.aktuell >= 40 -> {
+                    // Wenn ausreichend Blutdurst vorhanden ist, Feueratem anwenden
+                    feueratem(helden)
+                    println("Ihr wagt es euch mir zu wiedersetzen, wie schmeckt euch mein Feueratem.")
+                }
+                else -> {
+                    // Ansonsten normal angreifen
+                    greifeAn(helden)
+                    println("$name führt normalen Angriff aus.")
+                }
+            }
+        }
+
+        blutdurst.aktuell = (blutdurst.aktuell + berechneZufallsSchaden() / 2).coerceAtMost(blutdurst.max)
+        println("Blutdurst des Endgegners: ${blutdurst.aktuell}/${blutdurst.max}")
+
+        if (minionBeschworen) {
+            greifeMitMinionAn()
+            println("Minion greift an.")
+        } else {
+            println("$name hat noch keine Minions beschworen.")
+        }
+    }
+
+
+
 
     private fun berechneZufallsSchaden(): Int {
         return (Math.random() * 20 + 30).toInt()
@@ -112,22 +145,33 @@ class Endgegner(
         val maxHp: Double = 1200.0
         val hpVerlust = maxHp - hp
         val prozentualerVerlust = hpVerlust / maxHp
+
         if (prozentualerVerlust >= 0.5) {
             // 20% Chance, Feueratem zu benutzen
             if (Math.random() < 0.2) {
                 feueratem(helden)
             } else {
-                greifeMitMinionAn()
+                if (hp < 1000 && !minionBeschworen) {
+                    beschwoereMinion()
+                } else {
+                    greifeMitMinionAn()
+                }
             }
         } else {
-            greifeMitMinionAn()
+            if (hp < 1000 && !minionBeschworen) {
+                beschwoereMinion()
+            } else {
+                greifeMitMinionAn()
+            }
         }
-
-        // Endgegner greift die Helden an
         helden.forEach { held ->
             if (held.hp > 0) {
                 greifeAn(listOf(held))
             }
         }
+    }
+
+    fun greifeAn(helden: List<Held>) {
+
     }
 }
